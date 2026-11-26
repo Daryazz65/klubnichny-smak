@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Одиннадцать сортов малины в каталоге саженцев ЛПХ Клубничный Смак.">
+  <meta name="theme-color" content="#240e1c">
+  <title>Малина · ЛПХ Клубничный Смак</title>
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./data.js"></script>
+  <script defer src="./plant.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <header class="bar" id="top">
+    <div class="shell bar-inner">
+      <a class="wordmark" href="#top" aria-label="ЛПХ Клубничный Смак, главная"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span><small>ЛПХ</small>Клубничный Смак</span></a>
+      <nav aria-label="Основное меню"><a href="#collection">Сорта</a><a href="#contacts">Контакты</a></nav>
+    </div>
+  </header>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-shot" aria-hidden="true"></div>
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="kicker hero-kicker"><span></span> Принимаем заказы на малину</p>
+          <h1 id="hero-title">Малина<br><em>с характером.</em></h1>
+          <p class="hero-intro">Одиннадцать сортов для вашего сада. От ароматных красных до медово-жёлтых.</p>
+          <a href="#collection" class="pill">Выбрать сорт</a>
+        </div>
+        <div class="hero-caption" aria-hidden="true"><span>ЛПХ Клубничный Смак</span><span>Коллекция малины</span></div>
+      </div>
+    </section>
+
+    <section class="collection shell" id="collection" aria-labelledby="collection-title">
+      <div class="section-heading">
+        <div><p class="kicker">Коллекция малины</p><h2 id="collection-title">Сорта для сада</h2></div>
+        <p>Листайте карточки или выберите сорт по названию.</p>
+      </div>
+      <div class="showcase" id="showcase">
+        <figure class="portrait">
+          <img id="fruit-image" src="./red.webp" alt="Красная малина на ветке">
+          <figcaption id="image-caption">Фото красной малины для иллюстрации</figcaption>
+        </figure>
+        <div class="copy">
+          <div class="slide-controls">
+            <span class="counter" id="counter" aria-label="Номер карточки">01 / 11</span>
+            <div class="step-buttons">
+              <button type="button" id="prev" aria-label="Предыдущий сорт">‹</button>
+              <button type="button" id="next" aria-label="Следующий сорт">›</button>
+            </div>
+          </div>
+          <div id="variety-details" aria-live="polite" aria-atomic="true">
+            <h3 id="variety-title">Московский гигант</h3>
+            <p id="variety-description"></p>
+            <dl id="specs"></dl>
+          </div>
+          <a id="source" class="source" hidden></a>
+        </div>
+      </div>
+      <div class="chooser">
+        <h3>Все сорта малины</h3>
+        <div id="variety-list" class="variety-list"></div>
+        <p class="stock-note">Размер ягод, вкус, урожайность и морозостойкость указаны по данным хозяйства.</p>
+      </div>
+      <noscript><p>Включите JavaScript, чтобы листать карточки и смотреть параметры сортов.</p></noscript>
+    </section>
+
+    <section class="model-section" aria-labelledby="model-title">
+      <div class="shell model-layout">
+        <div class="model-copy">
+          <p class="kicker">Рассмотрите поближе</p>
+          <h2 id="model-title">Малина<br><em>в объёме</em></h2>
+          <p>Проведите по модели пальцем или мышью. Кнопки тоже поворачивают саженец.</p>
+          <div id="turn-buttons" class="step-buttons">
+            <button type="button" data-turn="-1" aria-label="Повернуть саженец влево">↶</button>
+            <button type="button" data-turn="1" aria-label="Повернуть саженец вправо">↷</button>
+          </div>
+        </div>
+        <div class="model-stage">
+          <canvas id="plant" aria-label="Стилизованная трёхмерная модель саженца малины. Поворот клавишами влево и вправо." tabindex="0"></canvas>
+          <p id="model-fallback" hidden>Модель доступна в браузерах с поддержкой WebGL.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact shell" id="contacts" aria-labelledby="contact-title">
+      <div><p class="kicker">ЛПХ Клубничный Смак</p><h2 id="contact-title">Контакты</h2></div>
+      <div id="contact-info"><p>Телефон и место самовывоза появятся здесь.</p></div>
+    </section>
+  </main>
+  <footer>
+    <div class="shell footer-inner"><a href="#top">ЛПХ Клубничный Смак</a>
+      <details><summary>Авторы фотографий</summary>
+        <ul>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Close-up_of_raspberries_on_bush.jpg">Красная малина, ulleo</a> · <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a></li>
+          <li><a href="https://commons.wikimedia.org/wiki/File:Fall_Gold_Raspberry.JPG">Малина Fall Gold, LGD12345</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>. Уменьшено и кадрировано при показе.</li>
+          <li><a href="https://doi.org/10.3390/metabo13111124">Полана, Chwil, Matraszek-Gawron и Kostryco, Metabolites (2023), рис. 1B</a> · <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Кадрировано.</li>
+        </ul>
+      </details>
+    </div>
+  </footer>
+</body>
+</html>
