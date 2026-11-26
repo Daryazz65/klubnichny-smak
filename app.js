@@ -87,47 +87,6 @@ search.addEventListener("input", filterVarieties);
 window.addEventListener("hashchange", openHash);
 openHash();
 
-const plant = document.querySelector("#plant");
-const lab = document.querySelector("#lab");
-const controls = document.querySelector("#model-controls");
-const scene = createPlantScene(plant, "raspberry");
-if (scene) {
-  const modes = controls.querySelectorAll("[data-scan]");
-  controls.addEventListener("click", (event) => {
-    const turn = event.target.closest("[data-turn]");
-    if (turn) scene.turn(Number(turn.dataset.turn) * .42);
-    const mode = event.target.closest("[data-scan]");
-    if (mode) {
-      const enabled = mode.dataset.scan === "true";
-      scene.scan(enabled);
-      lab.classList.toggle("scanning", enabled);
-      modes.forEach((button) => button.setAttribute("aria-pressed", String(button === mode)));
-    }
-  });
-  plant.addEventListener("keydown", (event) => {
-    const direction = {ArrowLeft:-1, ArrowRight:1}[event.key];
-    if (!direction) return;
-    event.preventDefault();
-    scene.turn(direction * .25);
-  });
-  let pointer = null;
-  plant.addEventListener("pointerdown", (event) => {
-    if (!event.isPrimary || event.button !== 0) return;
-    plant.setPointerCapture(event.pointerId);
-    pointer = {id:event.pointerId, x:event.clientX};
-  });
-  plant.addEventListener("pointermove", (event) => {
-    if (event.pointerId !== pointer?.id) return;
-    scene.turn((event.clientX - pointer.x) * .014);
-    pointer.x = event.clientX;
-  });
-  plant.addEventListener("lostpointercapture", () => { pointer = null; });
-} else {
-  plant.hidden = true;
-  controls.hidden = true;
-  document.querySelector("#model-fallback").hidden = false;
-}
-
 const {phone,pickup,hours} = contacts;
 if (phone || pickup || hours) {
   const info = document.querySelector("#contact-info");
