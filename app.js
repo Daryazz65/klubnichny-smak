@@ -1,15 +1,7 @@
-const card = document.querySelector("#showcase");
-const image = document.querySelector("#fruit-image");
-const caption = document.querySelector("#image-caption");
-const title = document.querySelector("#variety-title");
-const description = document.querySelector("#variety-description");
-const details = document.querySelector("#variety-details");
-const specs = document.querySelector("#specs");
-const source = document.querySelector("#source");
-const counter = document.querySelector("#counter");
-const list = document.querySelector("#variety-list");
+const varieties = document.querySelector("#varieties");
+const search = document.querySelector("#variety-search");
+const empty = document.querySelector("#empty");
 const traits = { frost:"Морозостойкость", yield:"Урожайность", size:"Размер ягоды", taste:"Вкус" };
-let current = 0;
 
 function element(tag, value, className) {
   const node = document.createElement(tag);
@@ -18,88 +10,99 @@ function element(tag, value, className) {
   return node;
 }
 
-function directLink(id) {
-  return "#malina/" + id;
+function externalLink(label, href) {
+  const link = element("a", label, "reference");
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noopener";
+  return link;
 }
 
-const links = cultivars.map(({ id, name }) => {
-  const link = element("a", name);
-  link.href = directLink(id);
-  list.append(link);
-  return link;
-});
+const cards = cultivars.map((variety) => {
+  const card = element("details", "", "variety");
+  card.id = "malina/" + variety.id;
+  const summary = document.createElement("summary");
+  const action = element("small", "Подробнее");
+  action.setAttribute("aria-hidden", "true");
+  summary.append(element("strong", variety.name), action);
+  const content = element("div", "", "variety-content");
 
-function render(index, reveal = false) {
-  current = index;
-  const variety = cultivars[index];
-  card.dataset.tone = variety.tone || "red";
-  const photo = variety.photo || (variety.tone ? {
-    src:"./gold.webp", alt:"Жёлтые ягоды малины на кусте", caption:"Жёлтоплодная малина Fall Gold · фото для иллюстрации",
-  } : {
-    src:"./red.webp", alt:"Красные ягоды малины на ветке", caption:"Красная малина · фото для иллюстрации",
-  });
-  if (image.getAttribute("src") !== photo.src) image.src = photo.src;
-  image.alt = photo.alt;
-  caption.textContent = photo.caption;
-  title.textContent = variety.name;
-  description.textContent = variety.description;
-  counter.textContent = String(index + 1).padStart(2,"0") + " / " + cultivars.length;
-  specs.replaceChildren(...Object.entries(traits).map(([key, label]) => {
+  if (variety.photo) {
+    const {src, alt, caption} = variety.photo;
+    const figure = document.createElement("figure");
+    const image = document.createElement("img");
+    image.src = src;
+    image.alt = alt;
+    image.loading = "lazy";
+    image.width = 803;
+    image.height = 858;
+    figure.append(image, element("figcaption", caption));
+    content.append(figure);
+  }
+
+  const specs = document.createElement("dl");
+  specs.append(...Object.entries(traits).map(([key, label]) => {
     const spec = element("div", "", "spec");
     spec.append(element("dt", label), element("dd", variety[key]));
     return spec;
   }));
-  source.hidden = !variety.source;
+  content.append(element("p", variety.description), specs);
   if (variety.source) {
-    source.textContent = variety.reference || variety.source[0];
-    source.href = variety.source[1];
-    source.target = "_blank";
-    source.rel = "noopener";
+    const [label, href] = variety.source;
+    content.append(externalLink(variety.reference || label, href));
   }
-  links.forEach((link, position) => {
-    if (position === index) link.setAttribute("aria-current","true");
-    else link.removeAttribute("aria-current");
-  });
-  if (reveal) {
-    details.classList.remove("reveal");
-    void details.offsetWidth;
-    details.classList.add("reveal");
+  if (variety.photoSource) {
+    content.append(externalLink("Фото сорта в источнике", variety.photoSource));
   }
-}
-
-function route(scroll) {
-  const index = cultivars.findIndex(({ id }) => directLink(id) === location.hash);
-  if (index < 0) return;
-  render(index, scroll);
-  if (scroll) card.scrollIntoView({block:"start"});
-}
-
-for (const [id, direction] of [["prev", -1],["next", 1]]) {
-  document.querySelector("#" + id).addEventListener("click", () => {
-    const index = (current + direction + cultivars.length) % cultivars.length;
-    history.replaceState(null, "", directLink(cultivars[index].id));
-    render(index, true);
+  card.addEventListener("toggle", () => {
+    action.textContent = card.open ? "Свернуть" : "Подробнее";
   });
+  card.append(summary, content);
+  varieties.append(card);
+  return card;
+});
+
+function normalize(value) {
+  return value.trim().toLocaleLowerCase("ru").replaceAll("ё", "е");
 }
 
-for (const link of links) {
-  link.addEventListener("click", (event) => {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey || link.hash !== location.hash) return;
-    event.preventDefault();
-    card.scrollIntoView({block:"start"});
+function filterVarieties() {
+  const query = normalize(search.value);
+  cards.forEach((card, index) => {
+    card.hidden = !normalize(cultivars[index].name).includes(query);
   });
+  empty.hidden = cards.some((card) => !card.hidden);
 }
-window.addEventListener("hashchange", () => route(true));
-render(0);
-route(true);
+
+function openHash() {
+  const card = cards.find(({id}) => "#" + id === location.hash);
+  if (!card) return;
+  search.value = "";
+  filterVarieties();
+  card.open = true;
+  requestAnimationFrame(() => card.scrollIntoView({block:"start"}));
+}
+
+search.addEventListener("input", filterVarieties);
+window.addEventListener("hashchange", openHash);
+openHash();
 
 const plant = document.querySelector("#plant");
-const turns = document.querySelector("#turn-buttons");
-const scene = createPlantScene(plant,"raspberry");
+const lab = document.querySelector("#lab");
+const controls = document.querySelector("#model-controls");
+const scene = createPlantScene(plant, "raspberry");
 if (scene) {
-  turns.addEventListener("click",(event) => {
-    const button = event.target.closest("[data-turn]");
-    if (button) scene.turn(Number(button.dataset.turn) * .42);
+  const modes = controls.querySelectorAll("[data-scan]");
+  controls.addEventListener("click", (event) => {
+    const turn = event.target.closest("[data-turn]");
+    if (turn) scene.turn(Number(turn.dataset.turn) * .42);
+    const mode = event.target.closest("[data-scan]");
+    if (mode) {
+      const enabled = mode.dataset.scan === "true";
+      scene.scan(enabled);
+      lab.classList.toggle("scanning", enabled);
+      modes.forEach((button) => button.setAttribute("aria-pressed", String(button === mode)));
+    }
   });
   plant.addEventListener("keydown", (event) => {
     const direction = {ArrowLeft:-1, ArrowRight:1}[event.key];
@@ -108,34 +111,34 @@ if (scene) {
     scene.turn(direction * .25);
   });
   let pointer = null;
-  plant.addEventListener("pointerdown",(event) => {
+  plant.addEventListener("pointerdown", (event) => {
     if (!event.isPrimary || event.button !== 0) return;
     plant.setPointerCapture(event.pointerId);
     pointer = {id:event.pointerId, x:event.clientX};
   });
-  plant.addEventListener("pointermove",(event) => {
+  plant.addEventListener("pointermove", (event) => {
     if (event.pointerId !== pointer?.id) return;
     scene.turn((event.clientX - pointer.x) * .014);
     pointer.x = event.clientX;
   });
-  plant.addEventListener("lostpointercapture",() => { pointer = null; });
+  plant.addEventListener("lostpointercapture", () => { pointer = null; });
 } else {
   plant.hidden = true;
-  turns.hidden = true;
+  controls.hidden = true;
   document.querySelector("#model-fallback").hidden = false;
 }
 
 const {phone,pickup,hours} = contacts;
 if (phone || pickup || hours) {
-  const contactInfo = document.querySelector("#contact-info");
-  contactInfo.replaceChildren();
+  const info = document.querySelector("#contact-info");
+  info.replaceChildren();
   if (phone) {
-    const link = element("a",phone);
-    link.href = "tel:" + phone.replace(/[^+\d]/g,"");
+    const link = element("a", phone);
+    link.href = "tel:" + phone.replace(/[^+\d]/g, "");
     const row = document.createElement("p");
     row.append(link);
-    contactInfo.append(row);
+    info.append(row);
   }
-  if (pickup) contactInfo.append(element("p",pickup));
-  if (hours) contactInfo.append(element("p",hours));
+  if (pickup) info.append(element("p", pickup));
+  if (hours) info.append(element("p", hours));
 }

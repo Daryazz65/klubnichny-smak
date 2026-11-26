@@ -213,6 +213,7 @@ function createPlantScene(canvas, kind, thumbnail = false) {
   `;
   const fragmentSource = `
     precision mediump float;
+    uniform float scan;
     varying vec3 surface;
     varying vec3 direction;
     varying vec3 position;
@@ -226,6 +227,13 @@ function createPlantScene(canvas, kind, thumbnail = false) {
       float highlight = pow(max(0.0, dot(n, normalize(key + vec3(0., 0., 1.)))), 24.0);
       float grain = fract(sin(dot(position * 98., vec3(12.9898, 78.233, 41.7))) * 2371.) * .045;
       vec3 shaded = surface * (.49 + .65 * light + .22 * edge - grain);
+      if (scan > .5) {
+        float stripe = smoothstep(.68, .93, cos(position.y * 174.0)) * .34;
+        float silhouette = pow(1.0 - abs(n.z), 2.0);
+        vec3 hologram = mix(vec3(.023, .18, .125), vec3(.50, 1.0, .66), .24 * light + .55 * silhouette + stripe);
+        gl_FragColor = vec4(hologram, 1.0);
+        return;
+      }
       gl_FragColor = vec4(shaded + vec3(.17, .14, .10) * highlight, 1.);
     }
   `;
@@ -252,7 +260,9 @@ function createPlantScene(canvas, kind, thumbnail = false) {
   gl.enable(gl.DEPTH_TEST);
   const angleLocation = gl.getUniformLocation(program, "angle");
   const frameLocation = gl.getUniformLocation(program, "frame");
+  const scanLocation = gl.getUniformLocation(program, "scan");
   let angle = kind === "raspberry" ? -.72 : .35;
+  let scanning = false;
   let scheduled = false;
 
   function render() {
@@ -271,6 +281,7 @@ function createPlantScene(canvas, kind, thumbnail = false) {
     gl.viewport(0, 0, pixelWidth, pixelHeight);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniform1f(angleLocation, angle);
+    gl.uniform1f(scanLocation, scanning ? 1 : 0);
     gl.uniform2f(frameLocation, zoom / width, zoom / height);
     gl.drawArrays(gl.TRIANGLES, 0, mesh.length / 9);
   }
@@ -284,6 +295,10 @@ function createPlantScene(canvas, kind, thumbnail = false) {
   new ResizeObserver(schedule).observe(canvas);
   schedule();
   return {
+    scan(enabled) {
+      scanning = enabled;
+      schedule();
+    },
     turn(delta) {
       angle = (angle + delta) % TAU;
       schedule();
