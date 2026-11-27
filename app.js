@@ -1,7 +1,21 @@
 const varieties = document.querySelector("#varieties");
 const search = document.querySelector("#variety-search");
 const empty = document.querySelector("#empty");
-const traits = { frost:"Морозостойкость", yield:"Урожайность", size:"Размер ягоды", taste:"Вкус" };
+const section = document.querySelector(".crop-section");
+const title = document.querySelector("#crop-title");
+const subtitle = document.querySelector("#crop-subtitle");
+const orders = document.querySelector("#crop-orders");
+const shrubList = document.querySelector("#shrub-list");
+const traits = {
+  frost: "Морозостойкость",
+  yield: "Урожайность",
+  size: "Размер ягоды",
+  taste: "Вкус",
+  ripening: "Срок созревания",
+  role: "Назначение",
+};
+let activeCrop;
+let cards = [];
 
 function element(tag, value, className) {
   const node = document.createElement(tag);
@@ -18,9 +32,22 @@ function externalLink(label, href) {
   return link;
 }
 
-const cards = cultivars.map((variety) => {
+const plural = new Intl.PluralRules("ru");
+const countLabels = { one: "сорт", few: "сорта", many: "сортов", other: "сортов" };
+const cropLinks = crops.map((crop) => {
+  const link = element("a", "", "crop-link");
+  const count = crop.varieties.length;
+  link.href = "#" + crop.id;
+  link.append(element("strong", crop.name), element("span", count + " " + countLabels[plural.select(count)]));
+  const row = document.createElement("li");
+  row.append(link);
+  shrubList.append(row);
+  return link;
+});
+
+function buildCard(crop, variety) {
   const card = element("details", "", "variety");
-  card.id = "malina/" + variety.id;
+  card.id = crop.id + "/" + variety.id;
   const summary = document.createElement("summary");
   const action = element("small", "Подробнее");
   action.setAttribute("aria-hidden", "true");
@@ -41,12 +68,13 @@ const cards = cultivars.map((variety) => {
   }
 
   const specs = document.createElement("dl");
-  specs.append(...Object.entries(traits).map(([key, label]) => {
+  specs.append(...Object.entries(traits).filter(([key]) => variety[key]).map(([key, label]) => {
     const spec = element("div", "", "spec");
     spec.append(element("dt", label), element("dd", variety[key]));
     return spec;
   }));
-  content.append(element("p", variety.description), specs);
+  if (variety.description) content.append(element("p", variety.description));
+  content.append(specs);
   if (variety.source) {
     const [label, href] = variety.source;
     content.append(externalLink(variety.reference || label, href));
@@ -58,9 +86,8 @@ const cards = cultivars.map((variety) => {
     action.textContent = card.open ? "Свернуть" : "Подробнее";
   });
   card.append(summary, content);
-  varieties.append(card);
   return card;
-});
+}
 
 function normalize(value) {
   return value.trim().toLocaleLowerCase("ru").replaceAll("ё", "е");
@@ -69,18 +96,39 @@ function normalize(value) {
 function filterVarieties() {
   const query = normalize(search.value);
   cards.forEach((card, index) => {
-    card.hidden = !normalize(cultivars[index].name).includes(query);
+    card.hidden = !normalize(activeCrop.varieties[index].name).includes(query);
   });
   empty.hidden = cards.some((card) => !card.hidden);
 }
 
 function openHash() {
-  const card = cards.find(({id}) => "#" + id === location.hash);
-  if (!card) return;
-  search.value = "";
-  filterVarieties();
-  card.open = true;
-  requestAnimationFrame(() => card.scrollIntoView({block:"start"}));
+  const [cropId, varietyId] = location.hash.slice(1).split("/");
+  const linkedCrop = crops.find(({id}) => id === cropId);
+  const crop = linkedCrop || activeCrop || crops[0];
+  if (crop !== activeCrop) {
+    activeCrop = crop;
+    section.id = crop.id;
+    title.textContent = crop.name;
+    subtitle.textContent = crop.subtitle || "";
+    subtitle.hidden = !crop.subtitle;
+    orders.textContent = crop.orders || "Принимаем заказы на саженцы.";
+    search.value = "";
+    cards = crop.varieties.map((variety) => buildCard(crop, variety));
+    varieties.replaceChildren(...cards);
+    cropLinks.forEach((link) => {
+      if (link.hash === "#" + crop.id) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+    filterVarieties();
+  }
+  if (!linkedCrop) return;
+  const card = cards.find(({id}) => id === cropId + "/" + varietyId);
+  if (card) {
+    search.value = "";
+    filterVarieties();
+    card.open = true;
+  }
+  requestAnimationFrame(() => (card || section).scrollIntoView({block:"start"}));
 }
 
 search.addEventListener("input", filterVarieties);

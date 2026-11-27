@@ -23,8 +23,8 @@
       <div class="wrap hero-grid">
         <div class="hero-copy">
           <h1 id="main-title">Плодовые и ягодные <em>растения</em></h1>
-          <p class="hero-description">Деревья, кустарники и ягоды для вашего сада. В каталоге уже доступны 11 сортов малины.</p>
-          <div class="hero-links"><a class="button" href="#catalog">Открыть каталог</a><a class="text-link" href="#malina">Сорта малины</a></div>
+          <p class="hero-description">Деревья, кустарники и ягоды для вашего сада. Выберите культуру, чтобы посмотреть сорта и их характеристики.</p>
+          <div class="hero-links"><a class="button" href="#catalog">Открыть каталог</a></div>
         </div>
 
         <figure class="hero-photo">
@@ -39,11 +39,7 @@
         <div class="groups">
           <section class="group" aria-labelledby="shrubs">
             <h3 id="shrubs">Кустарники</h3>
-            <ul>
-              <li><a class="crop-link" href="#malina"><strong>Малина</strong><span>11 сортов</span></a></li>
-              <li class="pending"><strong>Смородина</strong><span>Готовится</span></li>
-              <li class="pending"><strong>Облепиха</strong><span>Готовится</span></li>
-            </ul>
+            <ul id="shrub-list"></ul>
           </section>
           <section class="group" aria-labelledby="trees">
             <h3 id="trees">Плодовые деревья</h3>
@@ -61,16 +57,16 @@
       </div>
     </section>
 
-    <section id="malina" class="raspberry" aria-labelledby="raspberry-title">
+    <section id="malina" class="crop-section" aria-labelledby="crop-title">
       <div class="wrap">
         <div class="crumbs"><a href="#catalog">Каталог</a><span aria-hidden="true">/</span><span>Кустарники</span></div>
-        <div class="section-head"><div><h2 id="raspberry-title">Малина</h2><p>Принимаем заказы на саженцы.</p></div>
-          <label class="variety-search" for="variety-search"><span>Поиск по сортам малины</span><input type="search" id="variety-search" placeholder="Например, Полана"></label>
+        <div class="section-head"><div><h2 id="crop-title">Малина</h2><p id="crop-subtitle" hidden></p><p id="crop-orders">Принимаем заказы на саженцы.</p></div>
+          <label class="variety-search" for="variety-search"><span>Поиск по сортам</span><input type="search" id="variety-search" placeholder="Название сорта"></label>
         </div>
         <div class="variety-grid" id="varieties"></div>
         <p id="empty" hidden>Сорт с таким названием не найден. Попробуйте другое название.</p>
         <p class="note">Характеристики сортов указаны по данным хозяйства.</p>
-        <noscript><p>Включите JavaScript, чтобы открыть карточки малины.</p></noscript>
+        <noscript><p>Включите JavaScript, чтобы открыть карточки сортов.</p></noscript>
       </div>
     </section>
 

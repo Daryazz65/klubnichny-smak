@@ -12,4 +12,73 @@ const cultivars = [
   {id:"zheltyy-gigant", name:"Жёлтый гигант", frost:"Высокая", yield:"Высокая", size:"Крупные", taste:"Очень сладкий, медовый", tone:"gold", description:"Желтоплодный сорт из группы крупноплодной малины ВСТИСП. В описании хозяйства его отличает очень сладкий вкус с медовой ноткой.", source:["Иркутский государственный аграрный университет","https://agronauka-irsau.ru/files/v25.pdf"]},
 ];
 
+const crops = [
+  { id: "malina", name: "Малина", varieties: cultivars },
+  {
+    id: "ezhevika", name: "Ежевика",
+    varieties: [
+      { id:"lohtey", name:"Лохтей", frost:"Средняя", yield:"Очень высокая", size:"Крупные", taste:"Сладкий, насыщенный" },
+      { id:"bzhezina", name:"Бжезина", frost:"Высокая", yield:"Обильная", size:"Крупные", taste:"Сладкий, десертный" },
+      { id:"viktoriya", name:"Виктория", frost:"Средняя", yield:"Высокая", size:"Очень крупные", taste:"Преимущественно сладкий" },
+      { id:"gigant", name:"Гигант", frost:"Высокая", yield:"Очень высокая", size:"Особо крупные", taste:"Очень сладкий" },
+    ],
+  },
+  {
+    id: "chernaya-smorodina", name: "Чёрная смородина",
+    orders: "Принимаем заказы на осень на саженцы с открытым корнем.",
+    varieties: [
+      { id:"ben-houp", name:"Бен Хоуп", frost:"Очень высокая", yield:"Высокая", size:"Крупные", taste:"Насыщенный, классический смородиновый" },
+      { id:"slastena", name:"Сластена", frost:"Высокая", yield:"Обильная", size:"Средние и крупные", taste:"Очень сладкий, десертный" },
+      { id:"selechenskaya-2", name:"Селеченская 2", frost:"Очень высокая", yield:"Стабильная, высокая", size:"Крупные, одни из самых больших среди сортов смородины", taste:"Гармоничный, сладкий" },
+      { id:"titaniya", name:"Титания", frost:"Высокая", yield:"Очень высокая, стабильная", size:"Средние, плотные", taste:"Сбалансированный, с характерным смородиновым ароматом" },
+      { id:"ben-tiben", name:"Бен Тибен", frost:"Очень высокая", yield:"Высокая", size:"Средние и крупные, выровненные", taste:"Приятный, умеренно сладкий" },
+      { id:"belorusskaya-sladkaya", name:"Белорусская сладкая", frost:"Очень высокая", yield:"Стабильная", size:"Средние", taste:"Преимущественно сладкий, нежный. Подходит для употребления в свежем виде." },
+    ],
+  },
+  {
+    id: "irga", name: "Ирга",
+    varieties: [
+      { id:"nortlayn", name:"Нортлайн", frost:"Очень высокая", yield:"Высокая", size:"Крупные", taste:"Очень сладкий, без горечи" },
+      { id:"smouki", name:"Смоуки", frost:"Очень высокая", yield:"Высокая", size:"Крупные", taste:"Классический, сладкий" },
+      { id:"honeywood", name:"Хонейвуд", frost:"Очень высокая", yield:"Обильная", size:"Крупные", taste:"Медовый, насыщенный" },
+      { id:"martin", name:"Мартин", frost:"Очень высокая", yield:"Высокая", size:"Средние", taste:"Сладкий" },
+      { id:"lamarka", name:"Ламарка", frost:"Очень высокая", yield:"Стабильная", size:"Крупные", taste:"Десертный" },
+      { id:"krasnoyarskaya", name:"Красноярская", frost:"Очень высокая, адаптирована к суровым зимам", yield:"Высокая", size:"Крупные", taste:"Насыщенный, сбалансированный" },
+      { id:"zvezdnaya-noch", name:"Звёздная ночь", frost:"Очень высокая", yield:"Обильная", size:"Крупные", taste:"Глубокий, десертный, с тонкими фруктовыми нотками" },
+    ],
+  },
+  {
+    id: "aroniya", name: "Арония", subtitle: "Черноплодная рябина",
+    varieties: [
+      { id:"viking", name:"Викинг", frost:"Высокая", yield:"Высокая", size:"Крупные" },
+      { id:"zhemchuzhina", name:"Жемчужина", frost:"Очень высокая", yield:"Стабильная", size:"Средние" },
+      { id:"nero", name:"Неро", frost:"Очень высокая", yield:"Высокая", size:"Крупные" },
+    ],
+  },
+  {
+    id: "oblepiha", name: "Облепиха",
+    varieties: [
+      { id:"adam", name:"Адам (муж.)", frost:"Высокая", role:"Мужское растение-опылитель" },
+      { id:"azhurnaya", name:"Ажурная", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Поздний" },
+      { id:"aley", name:"Алей (муж.)", frost:"Высокая", role:"Мужское растение-опылитель" },
+      { id:"altayskaya", name:"Алтайская", frost:"Очень высокая", yield:"Высокая", size:"Средние", ripening:"Средний" },
+      { id:"velikan", name:"Великан", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Поздний" },
+      { id:"galerit", name:"Галерит", frost:"Высокая", yield:"Хорошая", size:"Средние", ripening:"Средний" },
+      { id:"dzhemovaya", name:"Джемовая", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Средний" },
+      { id:"dyuymovochka", name:"Дюймовочка", frost:"Высокая", yield:"Умеренная", size:"Мелкие", ripening:"Ранний" },
+      { id:"zhemchuzhnitsa", name:"Жемчужница", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Средний" },
+      { id:"kapriz", name:"Каприз", frost:"Высокая", yield:"Хорошая", size:"Средние", ripening:"Поздний" },
+      { id:"lisichka", name:"Лисичка", frost:"Высокая", yield:"Стабильная", size:"Средние", ripening:"Средний" },
+      { id:"lyubimaya", name:"Любимая", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Средний" },
+      { id:"chuyskaya", name:"Чуйская", frost:"Очень высокая", yield:"Высокая", size:"Средние", ripening:"Ранний" },
+      { id:"essel", name:"Эссель", frost:"Высокая", yield:"Высокая", size:"Крупные", ripening:"Средний" },
+      { id:"ayula", name:"Аюла", frost:"Очень высокая", yield:"Стабильная", size:"Средние", ripening:"Ранний" },
+      { id:"gnom", name:"Гном (муж.)", frost:"Высокая", role:"Мужское растение-опылитель" },
+      { id:"avgustina", name:"Августина", frost:"Очень высокая", yield:"Высокая", size:"Крупные", ripening:"Средний" },
+      { id:"chechek", name:"Чечек", frost:"Высокая, до −30 °C", yield:"Стабильная", size:"Средние", ripening:"Поздний" },
+      { id:"elizaveta", name:"Елизавета", frost:"Очень высокая", yield:"Очень высокая", size:"Крупные", ripening:"Средний" },
+    ],
+  },
+];
+
 const contacts = { phone:"", pickup:"", hours:"" };
