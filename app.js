@@ -5,7 +5,7 @@ const section = document.querySelector(".crop-section");
 const title = document.querySelector("#crop-title");
 const subtitle = document.querySelector("#crop-subtitle");
 const orders = document.querySelector("#crop-orders");
-const shrubList = document.querySelector("#shrub-list");
+const cropGroup = document.querySelector("#crop-group");
 const traits = {
   frost: "Морозостойкость",
   yield: "Урожайность",
@@ -48,7 +48,8 @@ const cropLinks = crops.map((crop) => {
   });
   const row = document.createElement("li");
   row.append(link);
-  shrubList.append(row);
+  const list = document.getElementById(crop.group || "shrub-list");
+  list.insertBefore(row, list.querySelector(".pending"));
   return link;
 });
 
@@ -77,11 +78,13 @@ function buildCard(crop, variety) {
   const specs = document.createElement("dl");
   specs.append(...Object.entries(traits).filter(([key]) => variety[key]).map(([key, label]) => {
     const spec = element("div", "", "spec");
-    spec.append(element("dt", label), element("dd", variety[key]));
+    const traitName = key === "size" && crop.sizeLabel ? crop.sizeLabel : label;
+    spec.append(element("dt", traitName), element("dd", variety[key]));
     return spec;
   }));
   if (variety.description) content.append(element("p", variety.description));
-  content.append(specs);
+  if (specs.childElementCount) content.append(specs);
+  else if (!variety.description) content.append(element("p", "Характеристики сорта готовятся."));
   if (variety.source) {
     const [label, href] = variety.source;
     content.append(externalLink(variety.reference || label, href));
@@ -116,6 +119,8 @@ function openHash() {
     activeCrop = crop;
     section.id = crop.id;
     title.textContent = crop.name;
+    const currentList = document.getElementById(crop.group || "shrub-list");
+    cropGroup.textContent = currentList.previousElementSibling.textContent;
     subtitle.textContent = crop.subtitle || "";
     subtitle.hidden = !crop.subtitle;
     orders.textContent = crop.orders || "Принимаем заказы на саженцы.";
