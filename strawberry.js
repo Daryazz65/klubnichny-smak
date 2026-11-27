@@ -32,37 +32,74 @@ function strawberryMesh() {
   }
 
   // The shoulders are broad and the tip is offset, as in the reference berry.
-  surface((u, v) => {
+  function berryPoint(u, v) {
     const t = Math.min(.99995, Math.max(.00005, v));
     const angle = fullTurn * u;
-    const radius = Math.pow(Math.sin(Math.PI * t), .65) * (1.29 - .65 * t);
-    const lobes = 1 + .043 * Math.cos(3 * angle + t * 2) + .021 * Math.sin(5 * angle);
+    const radius = Math.pow(Math.sin(Math.PI * t), .53) * (1.37 - .79 * t);
+    const lobes = 1 + .045 * Math.cos(3 * angle + t * 2) + .022 * Math.sin(5 * angle);
+    const skin = .006 * Math.sin(17 * angle + 22 * t) * Math.cos(13 * angle - 33 * t);
     return [
-      radius * lobes * Math.cos(angle) - .17 * t * t,
-      .94 - 2.02 * t + .035 * Math.sin(angle * 3) * Math.sin(Math.PI * t),
-      radius * lobes * Math.sin(angle) * .88,
+      (radius * lobes + skin) * Math.cos(angle) - .13 * t * t,
+      .94 - 2.06 * t + .035 * Math.sin(angle * 3) * Math.sin(Math.PI * t),
+      (radius * lobes + skin) * Math.sin(angle) * .92,
     ];
-  }, 0, 64, 48);
+  }
+  surface(berryPoint, 0, 88, 64);
 
   for (let i = 0; i < 7; i++) {
     const angle = i * fullTurn / 7 + .16;
     surface((u, v) => {
-      const width = (u - .5) * .32 * Math.sin(Math.PI * v);
-      const radius = .08 + v * (.62 + .13 * Math.cos(i * 2));
-      const rise = .90 + v * (.31 + .13 * Math.sin(i * 2)) - .19 * Math.sin(Math.PI * v);
+      const width = (u - .5) * .32 * Math.pow(Math.sin(Math.PI * Math.max(0, Math.min(1, v))), .82);
+      const radius = .07 + v * (.72 + .17 * Math.cos(i * 2));
+      const rise = .91 - .12 * Math.sin(Math.PI * v) + v * (.06 + .14 * Math.sin(i * 2));
+      const bend = .16 * v * v * Math.cos(i * 2.8);
       return [
-        Math.cos(angle) * radius - Math.sin(angle) * width,
-        rise + .13 * v * v - Math.abs(width) * .45,
-        Math.sin(angle) * radius + Math.cos(angle) * width,
+        Math.cos(angle) * radius - Math.sin(angle) * (width + bend),
+        rise + .24 * Math.pow(v, 4) - Math.abs(width) * .52,
+        Math.sin(angle) * radius + Math.cos(angle) * (width + bend),
       ];
     }, 1, 7, 13, true);
   }
   surface((u, v) => {
     const angle = u * fullTurn;
-    const radius = .064 - .025 * v;
-    return [.16 * v * v + radius * Math.cos(angle), 1.30 - .41 * v, radius * Math.sin(angle)];
+    const radius = .041 + .014 * v;
+    return [.19 * (1 - v) * (1 - v) + radius * Math.cos(angle), 1.54 - .65 * v, radius * Math.sin(angle)];
   }, 2, 12, 8);
-  return new Float32Array(vertices);
+
+  const solidCount = vertices.length / 9;
+  let randomState = 11;
+  function random() {
+    randomState = (Math.imul(randomState, 1664525) + 1013904223) >>> 0;
+    return randomState / 4294967296;
+  }
+
+  function drop(center, radius, stretch) {
+    surface((u, v) => {
+      const longitude = u * fullTurn;
+      const latitude = Math.PI * v;
+      return [
+        center[0] + radius * Math.cos(longitude) * Math.sin(latitude),
+        center[1] + radius * stretch * Math.cos(latitude),
+        center[2] + radius * Math.sin(longitude) * Math.sin(latitude),
+      ];
+    }, 3, 10, 7);
+  }
+
+  for (let i = 0; i < 54; i++) {
+    const u = random();
+    const v = .18 + random() * .73;
+    const p = berryPoint(u, v);
+    const radius = .012 + .047 * Math.pow(random(), 2.4);
+    drop([p[0] * 1.016, p[1], p[2] * 1.016], radius, 1.12 + random() * .6);
+  }
+  for (let i = 0; i < 21; i++) {
+    const direction = random() * fullTurn;
+    const distance = 1.02 + .25 * random();
+    const height = -.87 + random() * 1.52;
+    drop([Math.cos(direction) * distance, height, Math.sin(direction) * distance],
+      .016 + .07 * Math.pow(random(), 2.3), .94 + random() * .52);
+  }
+  return { vertices: new Float32Array(vertices), solidCount };
 }
 
 function startStrawberryBackdrop() {
@@ -80,17 +117,19 @@ function startStrawberryBackdrop() {
     uniform float angle;
     uniform vec2 frame;
     varying mediump vec3 direction;
+    varying mediump vec3 surfacePoint;
     varying mediump vec2 surfaceUV;
     varying mediump float surfaceMaterial;
     vec3 rotate(vec3 p) {
       float c = cos(angle), s = sin(angle);
       vec3 spun = vec3(c * p.x + s * p.z, p.y, -s * p.x + c * p.z);
-      return vec3(.817 * spun.x + .576 * spun.y, -.576 * spun.x + .817 * spun.y, spun.z);
+      return vec3(.914 * spun.x + .407 * spun.y, -.407 * spun.x + .914 * spun.y, spun.z);
     }
     void main() {
       vec3 p = rotate(point);
-      gl_Position = vec4(p.xy * frame, -.34 * p.z, 1.0 - .12 * p.z);
+      gl_Position = vec4((p.xy - vec2(0., .10)) * frame, -.34 * p.z, 1.0 - .12 * p.z);
       direction = rotate(normal);
+      surfacePoint = point;
       surfaceUV = uv;
       surfaceMaterial = material;
     }
@@ -98,28 +137,59 @@ function startStrawberryBackdrop() {
   const fragmentSource = `
     precision mediump float;
     varying vec3 direction;
+    varying vec3 surfacePoint;
     varying vec2 surfaceUV;
     varying float surfaceMaterial;
+    float hash(vec2 p) {
+      p = fract(p * vec2(.1031, .11369));
+      p += dot(p, p.yx + 19.19);
+      return fract((p.x + p.y) * p.x);
+    }
+    float noise(vec2 p) {
+      vec2 f = fract(p);
+      vec2 i = floor(p);
+      f = f * f * (3.0 - 2.0 * f);
+      return mix(mix(hash(i), hash(i + vec2(1., 0.)), f.x),
+                 mix(hash(i + vec2(0., 1.)), hash(i + vec2(1., 1.)), f.x), f.y);
+    }
     void main() {
       vec3 n = normalize(direction);
       vec3 light = normalize(vec3(-.55, .68, .90));
-      float diffuse = .53 + .52 * max(0.0, dot(n, light));
-      float shine = pow(max(0.0, dot(n, normalize(light + vec3(0.0, 0.0, 1.0)))), 25.0);
+      vec3 rimLight = normalize(vec3(.85, .11, -.40));
+      vec3 view = vec3(0., 0., 1.);
+      float diffuse = .31 + .64 * max(0.0, dot(n, light)) + .21 * max(0.0, dot(n, rimLight));
+      float shine = max(0.0, dot(n, normalize(light + view)));
       vec3 color;
+      if (surfaceMaterial > 2.5) {
+        float fresnel = pow(1.0 - abs(dot(n, view)), 3.2);
+        float glass = pow(shine, 52.0) + pow(max(0.0, dot(n, normalize(rimLight + view))), 36.0);
+        color = mix(vec3(.32, .24, .19), vec3(1., .94, .82), clamp(glass + fresnel * .77, 0., 1.));
+        gl_FragColor = vec4(color, .13 + .45 * fresnel + .39 * glass);
+        return;
+      }
       if (surfaceMaterial < .5) {
         vec2 uv = surfaceUV;
-        float row = floor(uv.y * 14.0);
-        vec2 cell = vec2(uv.x * 25.0 + mod(row, 2.0) * .5, uv.y * 14.0);
-        vec2 pit = fract(cell) - vec2(.5);
-        float d = length(pit * vec2(1.08, .88));
-        float hasPits = smoothstep(.045, .14, uv.y) * (1.0 - smoothstep(.87, .99, uv.y));
-        float hollow = (1.0 - smoothstep(.12, .33, d)) * hasPits;
-        float seed = (1.0 - smoothstep(.07, .13, length((pit + vec2(.022, .032)) * vec2(1.5, .76)))) * hasPits;
-        float rim = (smoothstep(.22, .29, d) - smoothstep(.30, .40, d)) * hasPits;
-        color = mix(vec3(.87, .15, .10), vec3(.47, .025, .055), uv.y * .72 + hollow * .23);
-        color += rim * vec3(.12, .048, .017);
-        color = mix(color, vec3(.90, .63, .25), seed * .9);
-        color = color * diffuse + vec3(.31, .21, .15) * shine * (1.0 - hollow * .75);
+        float row = floor(uv.y * 12.0);
+        vec2 cell = vec2(uv.x * 23.0 + mod(row, 2.0) * .5, uv.y * 12.0);
+        vec2 cellId = floor(cell);
+        cellId.x = mod(cellId.x, 23.0);
+        float variant = hash(cellId);
+        vec2 pit = fract(cell) - vec2(.5) + vec2(variant - .5, hash(cellId + 8.1) - .5) * .32;
+        float d = length(pit * vec2(1.11, .86));
+        float hasPits = smoothstep(.045, .15, uv.y) * (1.0 - smoothstep(.87, .995, uv.y));
+        float hollow = (1.0 - smoothstep(.12, .32, d)) * hasPits;
+        float seedRadius = .076 + .041 * variant;
+        float seed = (1.0 - smoothstep(seedRadius, seedRadius + .034, length((pit + vec2(.023, .032)) * vec2(1.56, .78)))) * hasPits;
+        float rim = (smoothstep(.19, .27, d) - smoothstep(.27, .38, d)) * hasPits;
+        float mottling = noise(vec2(surfacePoint.x + surfacePoint.z * .65, surfacePoint.y) * 23.0);
+        float grain = noise(vec2(surfacePoint.x - surfacePoint.z * .41, surfacePoint.y) * 119.0);
+        color = mix(vec3(.88, .13, .092), vec3(.42, .025, .040), uv.y * .34 + mottling * .36 + hollow * .27);
+        color += rim * vec3(.136, .045, .017) + grain * vec3(.035, .020, .012);
+        vec3 gold = mix(vec3(.76, .40, .10), vec3(1.0, .81, .42), clamp(.33 + pit.y * 3.0 + variant * .46, 0., 1.));
+        color = mix(color, gold, seed);
+        float wet = pow(shine, 36.0) * (.24 + .64 * grain) + pow(shine, 11.0) * .105;
+        float sideGlint = pow(max(0.0, dot(n, normalize(rimLight + view))), 49.0) * (.23 + grain * .3);
+        color = color * diffuse + vec3(1., .82, .74) * (wet + sideGlint) * (1.0 - hollow * .76);
       } else {
         float vein = 1.0 - smoothstep(.012, .06, abs(surfaceUV.x - .5));
         color = mix(vec3(.17, .35, .078), vec3(.49, .57, .18), surfaceUV.y * .54 + vein * .25);
@@ -142,13 +212,14 @@ function startStrawberryBackdrop() {
   gl.useProgram(program);
   const mesh = strawberryMesh();
   gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-  gl.bufferData(gl.ARRAY_BUFFER, mesh, gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, mesh.vertices, gl.STATIC_DRAW);
   for (const [name, size, offset] of [["point", 3, 0], ["normal", 3, 3], ["uv", 2, 6], ["material", 1, 8]]) {
     const location = gl.getAttribLocation(program, name);
     gl.enableVertexAttribArray(location);
     gl.vertexAttribPointer(location, size, gl.FLOAT, false, 36, offset * 4);
   }
   gl.enable(gl.DEPTH_TEST);
+  gl.blendFuncSeparate(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA, gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   const angleLocation = gl.getUniformLocation(program, "angle");
   const frameLocation = gl.getUniformLocation(program, "frame");
   const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)");
@@ -174,12 +245,17 @@ function startStrawberryBackdrop() {
       canvas.width = width;
       canvas.height = height;
     }
-    const zoom = .71 * Math.min(width, height);
+    const zoom = .70 * Math.min(width, height);
     gl.viewport(0, 0, width, height);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     gl.uniform1f(angleLocation, angle);
     gl.uniform2f(frameLocation, zoom / width, zoom / height);
-    gl.drawArrays(gl.TRIANGLES, 0, mesh.length / 9);
+    gl.drawArrays(gl.TRIANGLES, 0, mesh.solidCount);
+    gl.enable(gl.BLEND);
+    gl.depthMask(false);
+    gl.drawArrays(gl.TRIANGLES, mesh.solidCount, mesh.vertices.length / 9 - mesh.solidCount);
+    gl.depthMask(true);
+    gl.disable(gl.BLEND);
     if (animate) schedule();
   }
 

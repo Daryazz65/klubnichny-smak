@@ -28,16 +28,16 @@ input { font: inherit; }
   z-index: -1;
   overflow: hidden;
   pointer-events: none;
-  background: radial-gradient(ellipse at 56% 54%, #edcfcc80, transparent 69%);
+  background: radial-gradient(ellipse at 50% 50%, #edcfcc80, transparent 69%);
 }
 .berry-canvas, .berry-still {
   position: absolute;
-  top: 51%;
-  left: 42%;
-  width: min(94vw, 820px);
-  height: min(94vw, 820px);
+  top: 50%;
+  left: 50%;
+  width: min(98vw, 124svh, 910px);
+  height: min(98vw, 124svh, 910px);
   transform: translate(-50%, -50%);
-  opacity: .19;
+  opacity: .25;
 }
 .berry-canvas { display: none; }
 .berry-still { object-fit: contain; mask-image: radial-gradient(circle, #000 55%, transparent 68%); }
@@ -141,7 +141,7 @@ h2 { font-size: clamp(2.5rem, 4.4vw, 4.1rem); line-height: 1.03; }
   .hero-description { margin-bottom: 14px; }
   .section-head, .contact-row { align-items: start; flex-direction: column; }
   .catalog, .crop-section, .contacts { padding-block: 34px 39px; }
-  .berry-canvas, .berry-still { left: 50%; width: 145vw; height: 145vw; max-width: 640px; max-height: 640px; opacity: .15; }
+  .berry-canvas, .berry-still { width: min(155vw, 700px); height: min(155vw, 700px); opacity: .20; }
 }
 @media (max-width: 400px) {
   .header-row { min-height: 65px; gap: 7px; }
