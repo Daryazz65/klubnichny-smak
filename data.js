@@ -1,6 +1,6 @@
 const cultivars = [
   {id:"moskovskiy-gigant", name:"Московский Гигант", frost:"Высокая", yield:"Очень высокая", size:"Особо крупные", taste:"Сладкий, ароматный", description:"В подборке хозяйства этот сорт выделяется особенно крупными ягодами. Их выраженный аромат дополняет сладкий вкус."},
-  {id:"polana", name:"Полана", frost:"Высокая", yield:"Обильная", size:"Средние", taste:"Сладкий", description:"Ремонтантный сорт с округлыми красными ягодами. В испытаниях Университета Миннесоты Полана относится к ранним сортам среди тех, что плодоносят на побегах текущего года.", source:["Университет Миннесоты","https://extension.umn.edu/agriculture/specialty-crops/commercial-fruit-production/raspberry-farming/raspberry-types-and-varieties"], photo:{src:"./polana.webp", alt:"Спелая ягода сорта Полана на ветке", caption:"Полана · фото из исследования"}},
+  {id:"polana", name:"Полана", frost:"Высокая", yield:"Обильная", size:"Средние", taste:"Сладкий", description:"Ремонтантный сорт с округлыми красными ягодами. В испытаниях Университета Миннесоты Полана относится к ранним сортам среди тех, что плодоносят на побегах текущего года.", source:["Университет Миннесоты","https://extension.umn.edu/agriculture/specialty-crops/commercial-fruit-production/raspberry-farming/raspberry-types-and-varieties"], photo:{src:"./polana.webp", alt:"Спелая ягода сорта Полана на ветке", caption:"Полана", width:803, height:858, attribution:["Chwil, Matraszek-Gawron и Kostryco, Metabolites (2023), рис. 1B", "https://doi.org/10.3390/metabo13111124", "CC BY 4.0", "https://creativecommons.org/licenses/by/4.0/", "Кадрировано."]}},
   {id:"amira", name:"Амира", frost:"Средняя", yield:"Высокая", size:"Крупные", taste:"Сладкий, насыщенный", description:"Итальянский ремонтантный сорт компании Berryplant. Ягоды созревают на верхней части молодых побегов. При сохранении побегов их нижние почки могут дать урожай на следующий год.", source:["Meiosis · описание BP 1","https://www.meiosis.co.uk/fruit_types/amira/"], reference:"Описание и фотографии сорта у Meiosis"},
   {id:"shani", name:"Шани", frost:"Средняя", yield:"Стабильная", size:"Крупные", taste:"Преимущественно сладкий", description:"Шани образует крупные конические ягоды светлого красно-малинового оттенка. Согласно описанию в патенте, куст прямостоячий, с хорошим ветвлением, а урожай формируется на побегах текущего года.", source:["Патент USPP31552P2","https://patents.google.com/patent/USPP31552P2/en"], photoSource:"https://www.noursefarms.com/blogs/advanced-berry-breeding/shani%E2%84%A2"},
   {id:"sapphire", name:"Сапфир", frost:"Высокая", yield:"Высокая", size:"Крупные", taste:"Гармоничный, сладкий", description:"Летняя малина с крупными плотными ягодами. Основной урожай созревает на побегах прошлого года. В канадском сортоиспытании плоды были длиннее и шире, чем у контрольного сорта Туламин.", source:["Канадское агентство по инспекции пищевых продуктов","https://active.inspection.gc.ca/english/plaveg/pbrpov/cropreport/ra/app00010202e.shtml?wbdisable=true"], reference:"На странице испытания есть фотографии сорта"},
@@ -135,7 +135,7 @@ const crops = [
     varieties: [
       { id:"belfer-kitayka", name:"Бельфер Китайка", frost:"Очень высокая", yield:"Высокая", size:"Средние", taste:"Сладкий, с лёгкой терпкостью" },
       { id:"zolotoy-ranet", name:"Золотой Ранет", frost:"Очень высокая", yield:"Стабильная", size:"Крупные", taste:"Десертный, сладко-кислый" },
-      { id:"belyy-naliv", name:"Белый Налив", frost:"Исключительная", yield:"Хорошая", size:"Крупные", taste:"Сладкий, насыщенный" },
+      { id:"belyy-naliv", name:"Белый Налив", frost:"Исключительная", yield:"Хорошая", size:"Крупные", taste:"Сладкий, насыщенный", photo:{src:"./media/belyy-naliv.webp", alt:"Яблоки сорта Белый Налив", caption:"Белый Налив", width:960, height:720, attribution:["Nickispeaki, Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Білий_налив_DSCN3334.JPG","CC BY-SA 4.0","https://creativecommons.org/licenses/by-sa/4.0/","Уменьшено."]} },
     ],
   },
   {
@@ -150,7 +150,7 @@ const crops = [
     varieties: [
       { id:"yakovlevskaya", name:"Яковлевская", frost:"Высокая", yield:"Высокая", size:"Крупные, около 130–150 г", taste:"Сладковато-кислый, с приятным ароматом" },
       { id:"rozi-red-bartlet", name:"Рози Ред Бартлет", frost:"Повышенная", yield:"Высокая", size:"Крупные, около 200–250 г", taste:"Приятный сладковатый, с лёгким оттенком кислоты, мускатным привкусом и ароматом" },
-      { id:"red-bartlet", name:"Ред Бартлет", frost:"Хорошая", yield:"Высокая, регулярное ежегодное плодоношение", size:"Крупные, около 180–220 г, правильной грушевидной формы", taste:"Сочный, с мускатно-медовым послевкусием и насыщенным ароматом, мякоть бело-кремовая" },
+      { id:"red-bartlet", name:"Ред Бартлет", frost:"Хорошая", yield:"Высокая, регулярное ежегодное плодоношение", size:"Крупные, около 180–220 г, правильной грушевидной формы", taste:"Сочный, с мускатно-медовым послевкусием и насыщенным ароматом, мякоть бело-кремовая", photo:{src:"./media/red-bartlett.webp", alt:"Красная груша сорта Ред Бартлет", caption:"Ред Бартлет", width:960, height:844, attribution:["Rhododendrites, Wikimedia Commons","https://commons.wikimedia.org/wiki/File:Red_Bartlett_pear.jpg","CC BY-SA 4.0","https://creativecommons.org/licenses/by-sa/4.0/","Уменьшено."]} },
     ],
   },
   {
@@ -210,9 +210,9 @@ const crops = [
     orders: "Сорта клубники в каталоге.",
     varieties: [
       { id:"burbon", name:"Бурбон" },
-      { id:"albion", name:"Альбион" },
+      { id:"albion", name:"Альбион", photo:{src:"./media/albion.webp", alt:"Две спелые ягоды клубники сорта Альбион", caption:"Альбион", width:960, height:696, attribution:["Bebek Markovinović и соавт., Foods (2022), рис. 1B","https://doi.org/10.3390/foods11050640","CC BY 4.0","https://creativecommons.org/licenses/by/4.0/","Кадрировано."]} },
       { id:"murano", name:"Мурано" },
-      { id:"kabrillo", name:"Кабрилло" },
+      { id:"kabrillo", name:"Кабрилло", photoSource:"https://active.inspection.gc.ca/english/plaveg/pbrpov/cropreport/str/app00010197e.shtml" },
       { id:"krapo-10", name:"Крапо-10" },
       { id:"aziya", name:"Азия" },
       { id:"koroleva-elizaveta-2", name:"Королева Елизавета-2" },
@@ -220,4 +220,4 @@ const crops = [
   },
 ];
 
-const contacts = { phone:"", pickup:"", hours:"" };
+const contacts = { phone:"+7 (910) 488-98-68", telegram:"@Olgaa47632", pickup:"", hours:"" };

@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Фотографии и видео саженцев ЛПХ Клубничный Смак.">
+  <meta name="theme-color" content="#faf8f1">
+  <title>Галерея саженцев — ЛПХ Клубничный Смак</title>
+  <link rel="stylesheet" href="./style.css?v=5">
+  <script defer src="./gallery.js"></script>
+</head>
+<body id="top">
+  <header class="site-header">
+    <div class="wrap header-row">
+      <a href="./" class="brand" aria-label="ЛПХ Клубничный Смак, главная"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span><span><small>ЛПХ</small>Клубничный Смак</span></a>
+      <nav aria-label="Основное меню"><a href="./#catalog">Каталог</a><a href="./gallery.html" aria-current="page">Галерея</a><a href="./#contacts">Контакты</a></nav>
+    </div>
+  </header>
+  <main class="wrap gallery-page">
+    <h1>Галерея саженцев</h1>
+    <p class="gallery-intro">Листья, побеги и корни крупным планом. Нажмите на фото, чтобы увеличить его.</p>
+    <div class="gallery-jump"><a href="#photos">Смотреть фото</a><a href="#video">Смотреть видео</a></div>
+    <section class="gallery-section" id="photos" aria-labelledby="photo-title">
+      <h2 id="photo-title">Фотографии</h2>
+      <div class="gallery-grid" id="gallery-grid"></div>
+      <noscript><p>Включите JavaScript, чтобы просмотреть фотографии.</p></noscript>
+    </section>
+    <section class="gallery-section gallery-video" id="video" aria-labelledby="video-title">
+      <div><h2 id="video-title">Видео саженца</h2><p>Корневая система крупным планом.</p></div>
+      <video width="490" height="640" controls playsinline preload="none" poster="./media/roots-poster.webp" aria-label="Корневая система саженца крупным планом">
+        <source src="./media/roots-video.mp4" type="video/mp4">
+        <a href="./media/roots-video.mp4">Открыть видео саженца</a>
+      </video>
+    </section>
+  </main>
+  <footer><div class="wrap footer-row"><a href="./">ЛПХ Клубничный Смак</a><a href="./#contacts">Контакты</a></div></footer>
+  <dialog class="photo-dialog" aria-label="Увеличенный снимок">
+    <form method="dialog" class="photo-toolbar"><p id="photo-caption"></p><button type="submit">Закрыть</button></form>
+    <div id="photo-enlargement"></div>
+    <div class="photo-toolbar photo-navigation"><button type="button" id="previous-photo">Предыдущее фото</button><button type="button" id="next-photo">Следующее фото</button></div>
+  </dialog>
+</body>
+</html>

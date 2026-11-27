@@ -63,15 +63,24 @@ function buildCard(crop, variety) {
   const content = element("div", "", "variety-content");
 
   if (variety.photo) {
-    const {src, alt, caption} = variety.photo;
+    const {src, alt, caption, attribution, width, height} = variety.photo;
     const figure = document.createElement("figure");
     const image = document.createElement("img");
     image.src = src;
     image.alt = alt;
     image.loading = "lazy";
-    image.width = 803;
-    image.height = 858;
-    figure.append(image, element("figcaption", caption));
+    image.width = width;
+    image.height = height;
+    const credit = element("figcaption", caption);
+    if (attribution) {
+      const [author, sourceURL, license, licenseURL, change] = attribution;
+      const authorLink = element("a", author);
+      authorLink.href = sourceURL;
+      const licenseLink = element("a", license);
+      licenseLink.href = licenseURL;
+      credit.append(" · ", authorLink, " · ", licenseLink, ". " + change);
+    }
+    figure.append(image, credit);
     content.append(figure);
   }
 
@@ -147,13 +156,20 @@ search.addEventListener("input", filterVarieties);
 window.addEventListener("hashchange", openHash);
 openHash();
 
-const {phone,pickup,hours} = contacts;
-if (phone || pickup || hours) {
+const {phone,telegram,pickup,hours} = contacts;
+if (phone || telegram || pickup || hours) {
   const info = document.querySelector("#contact-info");
   info.replaceChildren();
   if (phone) {
     const link = element("a", phone);
     link.href = "tel:" + phone.replace(/[^+\d]/g, "");
+    const row = document.createElement("p");
+    row.append(link);
+    info.append(row);
+  }
+  if (telegram) {
+    const link = element("a", "Telegram " + telegram);
+    link.href = "https://t.me/" + telegram.slice(1);
     const row = document.createElement("p");
     row.append(link);
     info.append(row);
