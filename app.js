@@ -24,14 +24,6 @@ function element(tag, value, className) {
   return node;
 }
 
-function externalLink(label, href) {
-  const link = element("a", label, "reference");
-  link.href = href;
-  link.target = "_blank";
-  link.rel = "noopener";
-  return link;
-}
-
 const plural = new Intl.PluralRules("ru");
 const countLabels = { one: "сорт", few: "сорта", many: "сортов", other: "сортов" };
 const cropLinks = crops.map((crop) => {
@@ -62,28 +54,6 @@ function buildCard(crop, variety) {
   summary.append(element("strong", variety.name), action);
   const content = element("div", "", "variety-content");
 
-  if (variety.photo) {
-    const {src, alt, caption, attribution, width, height} = variety.photo;
-    const figure = document.createElement("figure");
-    const image = document.createElement("img");
-    image.src = src;
-    image.alt = alt;
-    image.loading = "lazy";
-    image.width = width;
-    image.height = height;
-    const credit = element("figcaption", caption);
-    if (attribution) {
-      const [author, sourceURL, license, licenseURL, change] = attribution;
-      const authorLink = element("a", author);
-      authorLink.href = sourceURL;
-      const licenseLink = element("a", license);
-      licenseLink.href = licenseURL;
-      credit.append(" · ", authorLink, " · ", licenseLink, ". " + change);
-    }
-    figure.append(image, credit);
-    content.append(figure);
-  }
-
   const specs = document.createElement("dl");
   specs.append(...Object.entries(traits).filter(([key]) => variety[key]).map(([key, label]) => {
     const spec = element("div", "", "spec");
@@ -94,13 +64,6 @@ function buildCard(crop, variety) {
   if (variety.description) content.append(element("p", variety.description));
   if (specs.childElementCount) content.append(specs);
   else if (!variety.description) content.append(element("p", "Характеристики сорта готовятся."));
-  if (variety.source) {
-    const [label, href] = variety.source;
-    content.append(externalLink(variety.reference || label, href));
-  }
-  if (variety.photoSource) {
-    content.append(externalLink("Фото сорта в источнике", variety.photoSource));
-  }
   card.addEventListener("toggle", () => {
     action.textContent = card.open ? "Свернуть" : "Подробнее";
   });

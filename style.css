@@ -53,8 +53,7 @@ h2 { font-size: clamp(2.5rem, 4.4vw, 4.1rem); line-height: 1.03; }
 .hero-links { display: flex; align-items: center; gap: 7px 21px; flex-wrap: wrap; }
 .button { display: inline-flex; align-items: center; min-height: 50px; padding: 9px 19px; border-radius: 6px; background: var(--green); color: #fff; font-weight: 650; text-decoration: none; }
 .button:hover { background: #2a3b2c; }
-.hero-photo img { display: block; width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; object-position: 55% center; border-radius: 9px; background: #e8ebdf; }
-.hero-photo figcaption { margin-top: 5px; color: var(--muted); font-size: .78rem; }
+.hero-photo img { display: block; width: 100%; height: auto; aspect-ratio: 6 / 5; object-fit: cover; object-position: center 52%; border-radius: 9px; background: #e8ebdf; }
 
 .catalog, .crop-section, .contacts { padding-block: 44px 54px; }
 .catalog { background: #eeefe6bf; border-block: 1px solid #e0e1d5; }
@@ -72,7 +71,7 @@ h2 { font-size: clamp(2.5rem, 4.4vw, 4.1rem); line-height: 1.03; }
 .pending span { color: var(--muted); }
 
 .crumbs { display: flex; align-items: center; gap: 8px; color: var(--muted); margin-bottom: 13px; }
-.crumbs a, .reference { color: var(--berry); }
+.crumbs a { color: var(--berry); }
 .section-head { display: flex; align-items: end; justify-content: space-between; gap: 18px; margin-bottom: 21px; }
 .section-head p { margin-top: 6px; color: var(--muted); }
 .variety-search { display: grid; gap: 5px; width: min(310px, 100%); font-size: .9rem; font-weight: 650; }
@@ -87,16 +86,11 @@ h2 { font-size: clamp(2.5rem, 4.4vw, 4.1rem); line-height: 1.03; }
 .variety summary small::after { content: " +"; }
 .variety[open] summary small::after { content: " −"; }
 .variety-content { padding: 15px 13px; border-top: 1px solid var(--border); }
-.variety-content figure { margin-bottom: 13px; }
-.variety-content img { display: block; width: 100%; height: auto; max-height: 360px; border-radius: 5px; object-fit: cover; }
-.variety-content figcaption, .note { color: var(--muted); font-size: .86rem; }
-.variety-content figcaption { margin-top: 5px; }
 .variety-content dl { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 12px; margin: 14px 0 8px; }
 .spec { border-top: 1px solid var(--border); padding-top: 7px; }
 .spec dt { color: var(--muted); font-size: .85rem; }
 .spec dd { font-weight: 650; margin: 0; }
-.reference { display: block; margin-top: 7px; overflow-wrap: anywhere; }
-.note, #empty { margin-top: 15px; }
+#empty { margin-top: 15px; }
 .contacts { background: #eeefe6bf; border-block: 1px solid #e0e1d5; }
 .contact-row { display: flex; justify-content: space-between; align-items: end; gap: 16px; }
 #contact-info { display: grid; gap: 5px; font-weight: 650; }
