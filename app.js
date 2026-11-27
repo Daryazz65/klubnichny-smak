@@ -39,6 +39,13 @@ const cropLinks = crops.map((crop) => {
   const count = crop.varieties.length;
   link.href = "#" + crop.id;
   link.append(element("strong", crop.name), element("span", count + " " + countLabels[plural.select(count)]));
+  link.addEventListener("click", (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (location.hash !== link.hash) history.pushState(null, "", link.hash);
+    openHash();
+    title.focus({preventScroll: true});
+  });
   const row = document.createElement("li");
   row.append(link);
   shrubList.append(row);
@@ -128,7 +135,7 @@ function openHash() {
     filterVarieties();
     card.open = true;
   }
-  requestAnimationFrame(() => (card || section).scrollIntoView({block:"start"}));
+  (card || section).scrollIntoView({block: "start", behavior: "instant"});
 }
 
 search.addEventListener("input", filterVarieties);
